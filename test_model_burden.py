@@ -21,9 +21,9 @@ odeModel = FiniteDifference(model)
 odeModel.set_boundary_conditions(u_boundary[0], u_boundary[1])
 
 #solve
-xEx, uEx, A, b = odeModel.solve(x_boundary, N)
+xEx, uEx, A, b = odeModel.solve_sparse(x_boundary, N)
 
-# Write everything into a file
+""" # Write everything into a file
 with open('solution.txt', 'w') as f:
     f.write("# Matrix A\n")
     np.savetxt(f, A, fmt='%.4f')
@@ -36,7 +36,7 @@ with open('solution.txt', 'w') as f:
     f.write("\n# |y(x_i) - u_i|\n")
     np.savetxt(f, np.abs(exactSol(xEx) - uEx), fmt='%.10f')
 
-print("File solution.txt created!")
+print("File solution.txt created!") """
 
 plt.plot(xEx, uEx, color='#1f77b4', label=f"numerical")
 plt.plot(xEx, model.exactsol(xEx), color="#f10707", label=f"exact")
