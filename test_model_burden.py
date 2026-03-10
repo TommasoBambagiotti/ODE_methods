@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from OdeSolverBV import FiniteDifference
+from ode_solver_bv import FiniteDifference
 from Exercise_11_3 import Exercise
 
 # *** BOUNDARY VALUE PROBLEM - Exercise 11.3 from Burden - TEST EXAMPLE ***

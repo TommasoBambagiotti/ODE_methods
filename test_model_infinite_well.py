@@ -1,7 +1,7 @@
 import numpy as np
 from scipy import linalg, integrate
 import matplotlib.pyplot as plt
-from OdeSolverBV import FiniteDifferenceHomo
+from ode_solver_bv import FiniteDifferenceHomo
 from infinite_well import InfiniteWell
 
 # *** INFINITE POTENTIAL WELL ***
