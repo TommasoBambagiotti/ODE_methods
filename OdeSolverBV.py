@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.linalg import eigh_tridiagonal
 
 
 class OdeSolverBV:
@@ -24,12 +25,8 @@ class OdeSolverBV:
             p (_type_): p=p(x) coefficient function
             q (_type_): q=q(x) coefficient function
             r (_type_): r=r(x) coefficient function
-        """        
-
+        """
         self.f = f
-        #self.p = f(0)
-        #self.q = f(1)
-        #self.r = f(2)
 
     def set_boundary_conditions(self, u_a, u_b):
         """Set the boundary condition
@@ -37,11 +34,11 @@ class OdeSolverBV:
         Args:
             u_a (array): left boundary condition
             u_b (array): right boundary condition
-        """        
+        """
         # boundary values at x=a and x=b
         self.u_a = u_a
         self.u_b = u_b
-    
+
 
 class FiniteDifference(OdeSolverBV):
     def solve(self, x_span, N):
@@ -74,6 +71,8 @@ class FiniteDifference(OdeSolverBV):
         x_int = self.x[1:-1]  # remove first and last elements
 
         # define coefficients vector
+        # we use f=(p,q,r) tuple of the coefficient functions
+        # f(x)[0]=p, f(x)[1]=q, f(x)[2]=r array
         b = np.zeros(N)  # same dimension of x_int
         b[0] = -(self.dx**2)*self.f(x_int[0])[2] + \
                 (1+(self.dx/2)*self.f(x_int[0])[0])*self.u_a
@@ -126,24 +125,17 @@ class FiniteDifferenceHomo(OdeSolverBV):
         x_int = self.x[1:-1]
 
         # tridiagonal matrix -> sparse matrix...?
-        # first compute p(x_i) for i=1,...,N then remove p(x_N)
-        sup_diag = -1
+        off_diag = -1*np.ones(N-1)
         # compute q(x_i) for i=1,...,N
         princ_diag = 2 + (self.dx**2)*self.V(x_int)
-        # first compute p(x_i) for i=1,...,N then remove p(x_1)
-        inf_diag = -1
 
-        A = np.diag(princ_diag, k=0) + \
-            np.diag(sup_diag, k=1) + \
-            np.diag(inf_diag, k=-1)
+        # optimised for symmetric tridiagonal matrices
+        w, H = eigh_tridiagonal(princ_diag, off_diag)
 
-        w, self.u[1:-1] = np.linalg.eig(A)
-
-        return w, self.u   
+        return self.dx, w, H
 
 class Numerov(OdeSolverBV):
+
     def __init__(self):
         raise NotImplementedError("Numerov's algorithm for linear boundary problems" \
     "not implemented")
-        pass
-

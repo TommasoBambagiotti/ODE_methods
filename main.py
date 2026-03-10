@@ -1,49 +1,84 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from finite_difference import FiniteDifference
+from OdeSolverBV import FiniteDifference, FiniteDifferenceHomo
+from infinite_well import InfiniteWell
+# from Exercise_11_3 import Exercise
 # from fin_diff_model import ModelExample
 # from forward_euler_class import ForwardEuler_v0, ForwardEuler
 # from logistic import Logistic
 # from pendulum import Pendulum
 
-# *** BOUNDARY VALUE PROBLEM ***
 
+# *** INFINITE POTENTIAL WELL ***
+# Dirichlet boundary conditions at x=0 and x=L=pi
+L = np.pi
+N = [8, 18, 38, 78]
+u_boundary = [0, 0] # list
+x_boundary = (0, L) # tuple -> unordered
 
-# Example chap. 11.3 Burden's "Numerical Analysis"
+# interior mesh points
+x = np.linspace(x_boundary[0], x_boundary[1], N)
+
+infiniteWell = InfiniteWell()
+
+# define ode
+ode_infinite_well = FiniteDifferenceHomo(infiniteWell)
+
+#set boundary conditions u=[u[0],u[1]]
+ode_infinite_well.set_boundary_conditions(u_boundary[0], u_boundary[1])
+
+dx, w, H = ode_infinite_well.solve(x_boundary, n)
+
+""" print(v)
+plt.plot([1,2,3,4],v)
+plt.show() """
+
+""" print("eigenvalues",np.sqrt(w)/dx)
+v = H[:,0]
+plt.plot(x, v)
+plt.xlim(0,L)
+plt.show() """
+
+# print("eigenvalues = ", k)
+# print(H)
+
+""" # Write everything into a file
+with open('solutionInfiniteWell.txt', 'w') as f:
+    f.write("# Matrix A\n")
+    np.savetxt(f, A, fmt='%.4f')
+    f.write("\n# Vector b\n")
+    np.savetxt(f, b, fmt='%.4f')
+    f.write("\n# x values\n")
+    np.savetxt(f, xEx, fmt='%.4f')
+    f.write("\n# u values\n")
+    np.savetxt(f, uEx, fmt='%.10f')
+    f.write("\n# |y(x_i) - u_i|\n")
+    #np.savetxt(f, np.abs(exactSol(xEx) - uEx), fmt='%.10f')
+
+plt.plot(xEx, uEx, color='#1f77b4', label=f"numerical")
+plt.title("Finite difference method")
+plt.legend()
+plt.show()
+ """
+""" # *** BOUNDARY VALUE PROBLEM - Exercise 11.3 from Burden - TEST EXAMPLE ***
 N = 9
-u_boundary = [1, 2]
-x_boundary = (1, 2)
+u_boundary = [1, 2] # list
+x_boundary = (1, 2) # tuple -> unordered
 
+# interior mesh points
+x = np.linspace(x_boundary[0], x_boundary[1], N)
 
-def pCoef(x):
-    return -2/x
+#define model
+model = Exercise()
 
+#define ode
+odeModel = FiniteDifference(model)
 
-def qCoef(x):
-    return 2/x**2
+#set boundary conditions u=[u[0],u[1]]
+odeModel.set_boundary_conditions(u_boundary[0], u_boundary[1])
 
-
-def rCoef(x):
-    return np.sin(np.log(x))/x**2
-
-
-def exactSol(x):
-    c2 = (1/70)*(8 - 12*np.sin(np.log(2))-4*np.cos(np.log(2)))
-    return (11/10-c2)*x + \
-            c2/x**2 - \
-            (3/10)*np.sin(np.log(x)) - \
-            (1/10)*np.cos(np.log(x))
-
-
-x = np.linspace(1, 2, N)
-
-print("p(x)= ", pCoef(x))
-print("q(x)= ", qCoef(x))
-print("r(x)= ", rCoef(x))
-
-odeExample = FiniteDifference(pCoef, qCoef, rCoef)
-odeExample.set_boundary_conditions(u_boundary[0], u_boundary[1])
-xEx, uEx, A, b = odeExample.solve(x_boundary, N)
+#solve
+xEx, uEx, A, b = odeModel.solve(x_boundary, N)
 
 # Write everything into a file
 with open('solution.txt', 'w') as f:
@@ -61,9 +96,10 @@ with open('solution.txt', 'w') as f:
 print("File solution.txt created!")
 
 plt.plot(xEx, uEx, color='#1f77b4', label=f"numerical")
+plt.plot(xEx, model.exactsol(xEx), color="#f10707", label=f"exact")
 plt.title("Finite difference method")
 plt.legend()
-plt.show()
+plt.show() """
 
 """ 
 # Example: harmonic oscillator with angular frequency omega=1
