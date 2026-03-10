@@ -90,6 +90,7 @@ class FiniteDifference(OdeSolverBV):
         # first compute p(x_i) for i=1,...,N then remove p(x_1)
         inf_diag = -1 - (self.dx/2)*self.f(x_int)[0][1:]
 
+        # IMPLEMENT WITH SPARSE MATRIX!!!
         A = np.diag(princ_diag, k=0) + \
             np.diag(sup_diag, k=1) + \
             np.diag(inf_diag, k=-1)   
@@ -132,7 +133,10 @@ class FiniteDifferenceHomo(OdeSolverBV):
         # optimised for symmetric tridiagonal matrices
         w, H = eigh_tridiagonal(princ_diag, off_diag)
 
-        return self.dx, w, H
+        # add last point and normalise
+        # WIP
+
+        return self.dx, self.x, w, H
 
 class Numerov(OdeSolverBV):
 

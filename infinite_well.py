@@ -1,12 +1,13 @@
 import numpy as np
 
+
 class InfiniteWell:
-    
-    def __init__(self):
-        pass
-               
+
+    def __init__(self, L=np.pi):
+        self.L = L
+
     def __call__(self, x):
-        """ p = 0*x
-        q = -(self.k**2)*np.ones(self.N)
-        r = 0*x """
         return 0*x
+
+    def exact_sol(self, x, n=1):
+        return np.sqrt(2/self.L)*np.sin(n*np.pi*x/self.L)
