@@ -25,7 +25,7 @@ class OdeSolverBV:
             q (_type_): q=q(x) coefficient function
             r (_type_): r=r(x) coefficient function
         """        
-        
+
         self.f = f
         #self.p = f(0)
         #self.q = f(1)
@@ -75,21 +75,21 @@ class FiniteDifference(OdeSolverBV):
 
         # define coefficients vector
         b = np.zeros(N)  # same dimension of x_int
-        b[0] = -(self.dx**2)*self.r(x_int[0]) + \
-                (1+(self.dx/2)*self.p(x_int[0]))*self.u_a
+        b[0] = -(self.dx**2)*self.f(x_int[0])[2] + \
+                (1+(self.dx/2)*self.f(x_int[0])[0])*self.u_a
 
-        b[N-1] = -(self.dx**2)*self.r(x_int[N-1]) + \
-                  (1-(self.dx/2)*self.p(x_int[N-1]))*self.u_b
+        b[N-1] = -(self.dx**2)*self.f(x_int[N-1])[2] + \
+                  (1-(self.dx/2)*self.f(x_int[N-1])[0])*self.u_b
 
-        b[1:-1] = -(self.dx**2)*self.r(x_int[1:-1])
+        b[1:-1] = -(self.dx**2)*self.f(x_int[1:-1])[2]
 
         # tridiagonal matrix -> sparse matrix...?
         # first compute p(x_i) for i=1,...,N then remove p(x_N)
-        sup_diag = -1 + (self.dx/2)*self.p(x_int)[:-1]
+        sup_diag = -1 + (self.dx/2)*self.f(x_int)[0][:-1]
         # compute q(x_i) for i=1,...,N
-        princ_diag = 2 + (self.dx**2)*self.q(x_int)
+        princ_diag = 2 + (self.dx**2)*self.f(x_int)[1]
         # first compute p(x_i) for i=1,...,N then remove p(x_1)
-        inf_diag = -1 - (self.dx/2)*self.p(x_int)[1:]
+        inf_diag = -1 - (self.dx/2)*self.f(x_int)[0][1:]
 
         A = np.diag(princ_diag, k=0) + \
             np.diag(sup_diag, k=1) + \
