@@ -1,7 +1,7 @@
 # Numerical methods to solve ODE in Python
 Collection of numerical algorithms to solve linear Ordinary Differential 
 Equations (ODEs) and linear Partial Differential Equations (PDEs) in Python. 
-This'll project will be Work in Progress (wiP) for a while.
+This project will be Work in Progress (wiP) for a while.
 
 WiP.
 # Bibliography
