@@ -2,7 +2,7 @@ import numpy as np
 from scipy import linalg, integrate
 import matplotlib.pyplot as plt
 from ode_solver_bv import FiniteDifferenceHomo
-from infinite_well import InfiniteWell
+from Test_models_bv.infinite_well import InfiniteWell
 
 # *** INFINITE POTENTIAL WELL ***
 # Dirichlet boundary conditions at x=0 and x=L=pi

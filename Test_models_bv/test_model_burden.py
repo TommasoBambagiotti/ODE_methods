@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from ode_solver_bv import FiniteDifference
-from Exercise_11_3 import Exercise
+from Test_models.Exercise_11_3 import Exercise
 
 # *** BOUNDARY VALUE PROBLEM - Exercise 11.3 from Burden - TEST EXAMPLE ***
 N = 9
